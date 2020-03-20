@@ -20,14 +20,7 @@ public class UsersServiceImpl implements UsersService {
 	@Autowired
 	private UsersDao dao;
 
-	@Override
-	public void addUser(UsersDto dto) {
-		// 비밀번호 암호화
-		String encodePass = new BCryptPasswordEncoder().encode(dto.getUserPass());
-		dto.setUserPass(encodePass);
-		dao.insert(dto);
-	}
-
+	// 로긴
 	@Override
 	public Map<String, Object> isExistId(String inputUserId) {
 		boolean isExistId = dao.isExist(inputUserId);
@@ -35,7 +28,15 @@ public class UsersServiceImpl implements UsersService {
 		map.put("isExist", isExistId);
 		return map;
 	}
-
+	
+	@Override
+	public void addUser(UsersDto dto) {
+		// 비밀번호 암호화
+		String encodePass = new BCryptPasswordEncoder().encode(dto.getUserPass());
+		dto.setUserPass(encodePass);
+		dao.insert(dto);
+	}
+	
 	@Override
 	public boolean validUsers(UsersDto dto, HttpSession session, ModelAndView mView) {
 		boolean isValid = false;
@@ -44,11 +45,54 @@ public class UsersServiceImpl implements UsersService {
 			isValid = BCrypt.checkpw(dto.getUserPass(), passHash);
 		}
 		if (isValid) {
+			System.out.println(isValid);
 			UsersDto usersdto1 = dao.logIn(dto.getUserId());
 			session.setAttribute("usersDto", usersdto1);
+			session.setAttribute("id", usersdto1.getUserId());
 			return true;
 		} else {
 			return false;
 		}
+	}
+	
+	// 개인정보
+	@Override
+	public void showInfo(String id, ModelAndView mView) {
+		UsersDto dto=dao.getData(id);
+		
+		mView.addObject("dto", dto);
+	}
+	
+	// 비밀번호 바꾸기
+	@Override
+	public void updatePass(UsersDto dto, ModelAndView mView) {
+		String PassHash=dao.getData(dto.getUserId()).getUserPass();
+		boolean isValid=BCrypt.checkpw(dto.getUserPass(), PassHash);
+		
+		if(isValid) {
+			String encodePass=
+					new BCryptPasswordEncoder().encode(dto.getNewPass());
+			dto.setNewPass(encodePass);
+			dao.updatePass(dto);
+			
+			mView.addObject("isSuccess", true);
+			
+		} else {
+			
+			mView.addObject("isSuccess", false);
+		
+		}
+
+	}
+	
+	// 개인정보 바꾸기
+	public void userUpdate(UsersDto dto) {
+		dao.update(dto);
+	}
+	
+	// 회원탈퇴
+	@Override
+	public void deleteUser(String id) {
+		dao.delete(id);
 	}
 }

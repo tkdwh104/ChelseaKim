@@ -1,7 +1,5 @@
 package com.project.test.users.Dto;
 
-import java.util.Date;
-
 public class UsersDto {
 	private String userId;
 	private String userPass;
@@ -17,9 +15,32 @@ public class UsersDto {
 	private String birthday;
 	private int mileage;
 	private int verify;
+	private String newPass; // 비밀번호 변경 필드
 	
 	public UsersDto() {}
+	
+	public UsersDto(String userId, String userPass, String passQuiz, String quizAnswer, String userName,
+			String userPhone, String email, String userAddr1, String userAddr2, String userAddr3, String regiDate,
+			String birthday, int mileage, int verify, String newPass) {
+		super();
+		this.userId = userId;
+		this.userPass = userPass;
+		this.PassQuiz = passQuiz;
+		this.QuizAnswer = quizAnswer;
+		this.userName = userName;
+		this.userPhone = userPhone;
+		this.email = email;
+		this.userAddr1 = userAddr1;
+		this.userAddr2 = userAddr2;
+		this.userAddr3 = userAddr3;
+		this.regiDate = regiDate;
+		this.birthday = birthday;
+		this.mileage = mileage;
+		this.verify = verify;	
+		this.newPass = newPass; // 비밀번호 Change
+	}
 
+	
 	public String getUserId() {
 		return userId;
 	}
@@ -131,26 +152,17 @@ public class UsersDto {
 	public void setVerify(int verify) {
 		this.verify = verify;
 	}
-
-	public UsersDto(String userId, String userPass, String passQuiz, String quizAnswer, String userName,
-			String userPhone, String email, String userAddr1, String userAddr2, String userAddr3, String regiDate,
-			String birthday, int mileage, int verify) {
-		super();
-		this.userId = userId;
-		this.userPass = userPass;
-		this.PassQuiz = passQuiz;
-		this.QuizAnswer = quizAnswer;
-		this.userName = userName;
-		this.userPhone = userPhone;
-		this.email = email;
-		this.userAddr1 = userAddr1;
-		this.userAddr2 = userAddr2;
-		this.userAddr3 = userAddr3;
-		this.regiDate = regiDate;
-		this.birthday = birthday;
-		this.mileage = mileage;
-		this.verify = verify;
+	
+	// 비밀번호 변경
+	public String getNewPass() {
+		return newPass;
 	}
+	
+	public void setNewPass(String newPass) {
+		this.newPass = newPass;
+	}
+	
+	
 	
 	
 	
